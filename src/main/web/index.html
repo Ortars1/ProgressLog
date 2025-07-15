@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Моя страница</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="activity-graph.css">
 </head>
 <body>
     <div class="container">
@@ -12,105 +13,136 @@
             <h1>ProgressLog</h1>
             <p>Это мой проект для записи времени и категории в SQLite.</p>
         </header>
-
         <main>
-            <section class="form-section">
-                <form method="POST" id="dataForm">
-                    <div class="form-group">
-                        <label for="date">Дата:</label>
-                        <input type="date" id="date" name="date">
-                    </div>
-                    <div class="form-group">
-                        <label for="time">Время в минутах:</label>
-                        <input type="time" id="time" name="time" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="category-list">Выберите категорию:</label>
-                        <select id="category-list" name="category-list">
-                            <!-- Динамически добавляемые опции -->
-                        </select>
-                    </div>
-                    <button type="submit" class="btn">Отправить</button>
-                </form>
-            </section>
-
-            <section class="form-section">
-                <h2>Добавить новую категорию</h2>
-                <form method="POST" id="addCategoryForm">
-                    <div class="form-group">
-                        <input type="text" id="new-category" name="new-category" placeholder="Новая категория" required>
-                    </div>
-                    <button type="submit" class="btn">Добавить</button>
-                </form>
-            </section>
+            <div class="grid-container">
+                <section class="form-section">
+                    <form method="POST" id="dataForm">
+                        <div class="form-group">
+                            <label for="date">Дата:</label>
+                            <input type="date" id="date" name="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Время в минутах:</label>
+                            <input type="time" id="time" name="time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataForm-category-list">Выберите категорию:</label>
+                            <select id="dataForm-category-list" class="category-list" name="category-list">
+                                <!-- Динамически добавляемые опции -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">Отправить</button>
+                    </form>
+                </section>
+                <section class="form-section">
+                    <h2>Добавить новую категорию</h2>
+                    <form method="POST" id="addCategoryForm">
+                        <div class="form-group">
+                            <input type="text" id="new-category" name="new-category" placeholder="Новая категория" required>
+                        </div>
+                        <button type="submit" class="btn">Добавить</button>
+                    </form>
+                </section>
+            </div>
+            <!-- Дополнительные секции для отчётов и графиков -->
+            <div class="flex-container">
+                <div class="graph-container">
+                    <select class="year-list">
+                        <option value="2024">2024</option>
+                        <option value="2025" selected>2025</option>
+                        <!-- Динамически добавляемые опции -->
+                    </select>
+                    <select class="category-list">
+                        <!-- Динамически добавляемые опции -->
+                    </select>
+                    <div class="months"></div>
+                    <table class="activity-graph"></table>
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="graph-container">
+                    <select class="year-list">
+                        <option value="2024">2024</option>
+                        <option value="2025" selected>2025</option>
+                    </select>
+                    <select class="category-list">
+                    </select>
+                    <div class="months"></div>
+                    <table class="activity-graph"></table>
+                </div>
+            </div>
         </main>
     </div>
-    <script>
-        document.getElementById('dataForm').addEventListener('submit', function () {
-            // Очистка формы после отправки, задержка 0 гарантирует, что очистка произойдёт после завершения отправки данных
-            setTimeout(() => {
-                this.reset();
-                document.getElementById('date').value = getTodayDate();
-            }, 0);
-        });
-        document.getElementById('addCategoryForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const formData = new URLSearchParams(new FormData(this));
-
-            fetch('/', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    return loadCategories();
-                } else {
-                    throw new Error('Ошибка при отправке данных');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-            })
-            .finally(() => {
-                this.reset();
+        <script>
+            document.getElementById('dataForm').addEventListener('submit', function () {
+                // Очистка формы после отправки, задержка 0 гарантирует, что очистка произойдёт после завершения отправки данных
+                setTimeout(() => {
+                    this.reset();
+                    document.getElementById('date').value = getTodayDate();
+                }, 0);
             });
-        });
+            document.getElementById('addCategoryForm').addEventListener('submit', function (e) {
+                e.preventDefault();
 
-        window.onload = loadCategories;
+                const formData = new URLSearchParams(new FormData(this));
 
-        function loadCategories() {
-            fetch('/api/get-categories')
-                .then(response => response.json())
-                .then(data => {
-                    const categories = data.categories;
-                    const selectElement = document.getElementById('category-list');
-                    selectElement.innerHTML = '';
-
-                    categories.forEach(item => {
-                        const option = document.createElement('option');
-                        option.value = item.id_category;
-                        option.textContent = item.category;
-                        selectElement.appendChild(option);
-                    });
+                fetch('/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return loadCategories();
+                    } else {
+                        throw new Error('Ошибка при отправке данных');
+                    }
                 })
                 .catch(error => {
-                    console.error('Ошибка при загрузке данных:', error);
+                    console.error('Ошибка:', error);
+                })
+                .finally(() => {
+                    this.reset();
                 });
-        }
+            });
 
-        function getTodayDate() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Январь - это 0!
-            const dd = String(today.getDate()).padStart(2, '0');
+            window.onload = loadCategories;
 
-            return `${yyyy}-${mm}-${dd}`;
-        }
-        document.getElementById('date').value = getTodayDate();
-    </script>
+            function loadCategories() {
+                fetch('/api/get-categories')
+                    .then(response => response.json())
+                    .then(data => {
+                        const categories = data.categories;
+                        const selectElements = document.querySelectorAll('.category-list');
+                        selectElements.forEach(selectElement => {
+                            selectElement.innerHTML = '';
+
+                            categories.forEach(item => {
+                                const option = document.createElement('option');
+                                option.value = item.id_category;
+                                option.textContent = item.category;
+                                selectElement.appendChild(option);
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при загрузке данных:', error);
+                    });
+            }
+
+            function getTodayDate() {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0'); // Январь - это 0!
+                const dd = String(today.getDate()).padStart(2, '0');
+
+                return `${yyyy}-${mm}-${dd}`;
+            }
+            document.getElementById('date').value = getTodayDate();
+
+        </script>
+    <script src="activity-graph.js"></script>
 </body>
 </html>

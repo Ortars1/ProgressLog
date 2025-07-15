@@ -1,57 +1,69 @@
 /* Общие стили */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Убираем горизонтальный скролл */
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     color: #333;
-    margin: 0;
-    padding: 0;
 }
 
 .container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
+    width: 100%; /* Контейнер на всю ширину */
+    margin: 0 auto;
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 header {
     text-align: center;
-    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #007BFF;
+    color: #fff;
 }
 
 h1 {
-    color: #007BFF;
     font-size: 32px;
     margin-bottom: 10px;
 }
 
 p {
     font-size: 16px;
-    color: #666;
+    color: #f4f4f4;
+}
+
+/* Стили для сетки */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Две колонки */
+    gap: 20px; /* Расстояние между колонками */
+    padding: 20px; /* Добавляем отступы внутри сетки */
 }
 
 /* Стили для форм */
 .form-section {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 form {
     border: 1px solid #ddd;
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
     background-color: #f9f9f9;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
+    font-size: 14px;
 }
 
 input[type="date"],
@@ -59,38 +71,24 @@ input[type="time"],
 input[type="text"],
 select {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 /* Стили для кнопок */
 .btn {
     background-color: #007BFF;
     color: #fff;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border: none;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
+    width: 100%;
 }
 
 .btn:hover {
     background-color: #0056b3;
-}
-
-/* Адаптивность */
-@media (max-width: 600px) {
-    .container {
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 28px;
-    }
-
-    .form-section {
-        padding: 10px;
-    }
 }

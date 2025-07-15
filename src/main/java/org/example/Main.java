@@ -186,6 +186,12 @@ public class Main {
                     if (requestURI.equals("/style.css")) {
                         filePath = "src/main/web/style.css";
                         exchange.getResponseHeaders().set("Content-Type", "text/css; charset=UTF-8");
+                    } else if (requestURI.equals("/activity-graph.css")) {
+                        filePath = "src/main/web/activity-graph.css";
+                        exchange.getResponseHeaders().set("Content-Type", "text/css; charset=UTF-8");
+                    } else if (requestURI.equals("/activity-graph.js")) {
+                        filePath = "src/main/web/activity-graph.js";
+                        exchange.getResponseHeaders().set("Content-Type", "application/javascript; charset=UTF-8");
                     } else {
                         filePath = "src/main/web/index.html";
                         exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
