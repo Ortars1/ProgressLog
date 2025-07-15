@@ -21,6 +21,8 @@ import java.util.*;
 
 import java.sql.*;
 
+import static java.lang.Integer.*;
+
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -54,115 +56,19 @@ public class Main {
 
 
                     if (parsedDataForm.containsKey("time")) {
-                        /*String insertQuery = "INSERT INTO log () VALUES (?)";
+                        String insertQuery = "INSERT INTO log (id_category, date, time) VALUES (?, ?, ?)";
                         try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
-
+                            insertStatement.setInt(1, parseInt(parsedDataForm.get("category-list")));
+                            insertStatement.setString(2, parsedDataForm.get("date"));
+                            insertStatement.setInt(3, convertTimeToMinutes(parsedDataForm.get("time")));
+                            insertStatement.executeUpdate();
+                            exchange.sendResponseHeaders(205, -1); // 205 чтобы не обновлялась (пустой экран)
                         } catch (SQLException e) {
-
+                            e.printStackTrace();
+                            exchange.sendResponseHeaders(500, -1);
                         } finally {
-
-                        }*/
-                            /*try {
-                                String year = String.valueOf(LocalDate.parse(parsedDataForm.get("date")).getYear());
-                                // Открываем файл для чтения
-                                Workbook workbook = Workbook.getWorkbook(new File(filePath));
-                                Sheet readSheet = workbook.getSheet(year);
-                                if (readSheet == null) {
-                                    WritableWorkbook writableWorkbook = Workbook.createWorkbook(new File(filePath), workbook);
-                                    WritableSheet writeSheet = writableWorkbook.createSheet(year, 2);
-
-                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                    Date date = dateFormat.parse(parsedDataForm.get("date"));
-                                    DateFormat customDateFormat = new DateFormat("yyyy-MM-dd"); // Формат даты
-                                    WritableCellFormat dateCellFormat = new WritableCellFormat(customDateFormat);
-
-                                    DateFormat customTimeFormat = new DateFormat("HH:mm"); // Формат "00:18"
-                                    WritableCellFormat timeCellFormat = new WritableCellFormat(customTimeFormat);
-
-                                    // Записываем дату как объект DateTime
-                                    DateTime dateCell = new DateTime(0, 0, date, dateCellFormat);
-                                    Formula timeFormula = new Formula(1, 0, "TIMEVALUE(\"" + parsedDataForm.get("time") + "\")", timeCellFormat);
-                                    Label category = new Label(2, 0, parsedDataForm.get("category-list"));
-
-                                    //Formula monthFormula = new Formula(3, 0, "=ТЕКСТ(A1; \"ММММ\"");
-                                    System.out.println("Строка даты: ");
-                                    System.out.println(dateCell.getRow());
-
-                                    writeSheet.addCell(dateCell);
-                                    writeSheet.addCell(timeFormula);
-                                    writeSheet.addCell(category);
-
-                                    //writeSheet.addCell(monthFormula);
-
-                                    writableWorkbook.write();
-                                    writableWorkbook.close();
-                                    workbook.close();
-                                } else {
-
-                                    System.out.println(findLastFilledRow(readSheet, 0));
-
-
-                                    String currentDateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                                    Sheet categorySheet = workbook.getSheet("Категории");
-                                    String [][] currentData = new String[findLastFilledRow(categorySheet, 0) + 1][readSheet.getColumns()];
-
-
-                            for (int i = 0; i < readSheet.getRows(); i++) {
-                                Cell dateCell = readSheet.getCell(0, i);
-                                if (dateCell.getContents().equals(currentDateString)) {
-                                    currentData[i][0] = dateCell.getContents();
-                                    for (int j = 1; j < readSheet.getColumns(); j++) {
-                                        Cell cell = readSheet.getCell(j, i);
-                                        currentData[i][j] = cell.getContents();
-                                    }
-                                }
-                            }
-                            System.out.println(customFormat(currentData));
-                                    // Записываем новое значение на следующую строку
-                                    //String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                    Date date = dateFormat.parse(parsedDataForm.get("date"));
-                                    DateFormat customDateFormat = new DateFormat("yyyy-MM-dd"); // Формат даты
-                                    WritableCellFormat dateCellFormat = new WritableCellFormat(customDateFormat);
-
-
-                                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                                Date time = timeFormat.parse(parsedDataForm.get("time"));
-                                DateFormat customTimeFormat = new DateFormat("HH:mm"); // Формат "00:18"
-                                WritableCellFormat timeCellFormat = new WritableCellFormat(customTimeFormat);
-
-
-                                    DateFormat customTimeFormat = new DateFormat("HH:mm"); // Формат "00:18"
-                                    WritableCellFormat timeCellFormat = new WritableCellFormat(customTimeFormat);
-
-                                    DateTime dateCell = new DateTime(0, findLastFilledRow(readSheet, 0) + 1, date, dateCellFormat);
-                                    Formula timeFormula = new Formula(1, findLastFilledRow(readSheet, 0) + 1, "TIMEVALUE(\"" + parsedDataForm.get("time") + "\")", timeCellFormat);
-                                    Label category = new Label(2, findLastFilledRow(readSheet, 0) + 1, parsedDataForm.get("category-list"));
-
-                                    // Создаем копию файла с возможностью записи
-
-                                    WritableWorkbook writableWorkbook = Workbook.createWorkbook(new File(filePath), workbook);
-                                    WritableSheet writeSheet = writableWorkbook.getSheet(year);
-                                    writeSheet.addCell(dateCell);
-                                    writeSheet.addCell(timeFormula);
-                                    writeSheet.addCell(category);
-
-
-                                    // Сохраняем изменения и закрываем файл
-                                    writableWorkbook.write();
-                                    writableWorkbook.close();
-                                    workbook.close();
-                                }
-                            } catch (IOException | WriteException | BiffException | ParseException e) {
-                                e.printStackTrace();
-                            }*/
-
-                            //String response = "<html><body><h1>Данные получены!</h1></body></html>";
-                            //byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
-
-                            //exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
-                        exchange.sendResponseHeaders(205, -1); // Код ответа 200 (OK)
-                        exchange.close();
+                            exchange.close();
+                        }
                     } else if (parsedDataForm.containsKey("new-category")) {
                         String insertQuery = "INSERT OR IGNORE INTO category (category) VALUES (?)";
                         try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
@@ -234,6 +140,32 @@ public class Main {
             }
         });
 
+        server.createContext("/api/get-years", new HttpHandler() {
+            @Override
+            public void handle(HttpExchange exchange) throws IOException {
+                String jsonData;
+                String selectQuery = "SELECT date FROM log";
+
+                try (PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
+                    // Выполнение GET-запроса
+                    ResultSet resultSet = selectStatement.executeQuery();
+
+                    jsonData = prepareJsonData("years", resultSet);
+                    byte[] responseBytes = jsonData.getBytes(StandardCharsets.UTF_8);
+
+                    exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
+                    exchange.sendResponseHeaders(200, responseBytes.length);
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        os.write(responseBytes);
+                    }
+                } catch (IOException | SQLException e) {
+                    e.printStackTrace();
+                    exchange.sendResponseHeaders(500, -1);
+                } finally {
+                    exchange.close();
+                }
+            }
+        });
 
         /*server.createContext("/submit", new HttpHandler() {
             @Override
@@ -332,6 +264,14 @@ public class Main {
 
         jsonBuilder.append("] }");
         return jsonBuilder.toString();
+    }
+
+    private static int convertTimeToMinutes(String time) {
+        String[] parts = time.split(":");
+        int hours = parseInt(parts[0]);
+        int minunes = Integer.parseInt(parts[1]);
+
+        return hours * 60 + minunes;
     }
 
 }

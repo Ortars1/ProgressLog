@@ -132,6 +132,33 @@
                     });
             }
 
+            function loadYears() {
+                fetch('/api/get-years')
+                    .then(response => response.json())
+                    .then(data => {
+                        const years = data.years;
+                        const selectElements = document.querySelectorAll('.year-list');
+                        selectElements.forEach(selectElement => {
+                            selectElement.innerHTML = ''; // Очищаем список перед заполнением
+                            // Добавляем опции
+                            years.forEach(year => {
+                                const option = document.createElement('option');
+                                option.value = year;
+                                option.textContent = year;
+                                selectElement.appendChild(option);
+                            });
+                            // Выбираем последний год как значение по умолчанию
+                            if (years.length > 0) {
+                                const lastYear = years[years.length - 1];
+                                selectElement.value = lastYear; // Устанавливаем значение последнего года
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при загрузке годов:', error);
+                    });
+            }
+
             function getTodayDate() {
                 const today = new Date();
                 const yyyy = today.getFullYear();
