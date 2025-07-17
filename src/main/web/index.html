@@ -48,8 +48,8 @@
             <div class="flex-container">
                 <div class="graph-container">
                     <select class="year-list">
-                        <option value="2024">2024</option>
-                        <option value="2025" selected>2025</option>
+                        <!--<option value="2024">2024</option>
+                        <option value="2025" selected>2025</option>-->
                         <!-- Динамически добавляемые опции -->
                     </select>
                     <select class="category-list">
@@ -62,8 +62,8 @@
             <div class="flex-container">
                 <div class="graph-container">
                     <select class="year-list">
-                        <option value="2024">2024</option>
-                        <option value="2025" selected>2025</option>
+                        <!--<option value="2024">2024</option>
+                        <option value="2025" selected>2025</option>-->
                     </select>
                     <select class="category-list">
                     </select>
@@ -108,8 +108,6 @@
                 });
             });
 
-            window.onload = loadCategories;
-
             function loadCategories() {
                 fetch('/api/get-categories')
                     .then(response => response.json())
@@ -141,17 +139,20 @@
                         selectElements.forEach(selectElement => {
                             selectElement.innerHTML = ''; // Очищаем список перед заполнением
                             // Добавляем опции
-                            years.forEach(year => {
+                            years.forEach((item, i) => {
                                 const option = document.createElement('option');
-                                option.value = year;
-                                option.textContent = year;
+                                option.value = item.year;
+                                option.textContent = item.year;
+
+                                if (i === years.length - 1) {
+                                    option.selected = true;
+                                }
                                 selectElement.appendChild(option);
                             });
-                            // Выбираем последний год как значение по умолчанию
-                            if (years.length > 0) {
-                                const lastYear = years[years.length - 1];
-                                selectElement.value = lastYear; // Устанавливаем значение последнего года
-                            }
+
+                            const graphContainer = selectElement.closest('.graph-container');
+                            const initialYear = parseInt(selectElement.value, 10);
+                            buildTable(graphContainer, initialYear);
                         });
                     })
                     .catch(error => {
@@ -169,6 +170,12 @@
             }
             document.getElementById('date').value = getTodayDate();
 
+
+            document.addEventListener('DOMContentLoaded', () => {
+                // Загружаем категории и годы
+                loadCategories();
+                loadYears();
+            });
         </script>
     <script src="activity-graph.js"></script>
 </body>

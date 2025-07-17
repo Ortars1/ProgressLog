@@ -143,8 +143,8 @@ public class Main {
         server.createContext("/api/get-years", new HttpHandler() {
             @Override
             public void handle(HttpExchange exchange) throws IOException {
-                String jsonData;
-                String selectQuery = "SELECT date FROM log";
+                String jsonData; // DESC для убывания
+                String selectQuery = "SELECT DISTINCT strftime('%Y', date) AS year FROM log ORDER BY year ASC;";
 
                 try (PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
                     // Выполнение GET-запроса
