@@ -8,28 +8,26 @@
 .graph-container {
     background-color: #fff;
     padding: 20px;
+    border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
     width: 100%;
-    max-width: 900px;
 }
-/*
-.year-selector {
-    margin-bottom: 20px;
+
+.graph-container .select-wrapper {
+    display: flex;
+    gap: 10px; /* Расстояние между селектами */
+    margin-bottom: 10px; /* Отступ снизу */
 }
-.year-selector label {
-    font-size: 16px;
-    margin-right: 10px;
-}
-.year-selector select {
-    padding: 5px;
-    font-size: 16px;
-    border-radius: 5px;
+.graph-container select {
+    flex: 1; /* Селекты равномерно распределяются по доступной ширине */
+    padding: 8px;
     border: 1px solid #ccc;
-    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
 }
-*/
+
 .months {
     display: flex;
     justify-content: flex-start;
@@ -47,8 +45,8 @@ table {
     width: 100%;
 }
 td {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     background-color: #ebedf0;
     border: 1px solid #fff;
     border-radius: 3px;

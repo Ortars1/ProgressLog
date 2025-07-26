@@ -20,7 +20,7 @@ body {
 
 header {
     text-align: center;
-    padding: 20px;
+    padding: 17px;
     background-color: #007BFF;
     color: #fff;
 }
@@ -38,9 +38,22 @@ p {
 /* Стили для сетки */
 .grid-container {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Две колонки */
-    gap: 20px; /* Расстояние между колонками */
-    padding: 20px; /* Добавляем отступы внутри сетки */
+    grid-template-columns: 1fr 2fr; /* 1fr для форм 2fr для графиков */
+    gap: 20px;
+    padding: 20px;
+}
+
+.col-forms {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.col-graphs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 /* Стили для форм */
@@ -75,6 +88,7 @@ select {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
+    box-sizing: border-box;
 }
 
 /* Стили для кнопок */
